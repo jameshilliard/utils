@@ -40,4 +40,6 @@ for k in config.keys():
 
 
 
-
+import re
+y=re.search("Clock selected: ([a-zA-Z]+)",x)
+y.groups

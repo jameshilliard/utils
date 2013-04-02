@@ -1,5 +1,7 @@
 import time
 import subprocess
+import os
+import string
 
 def cur_time():
     return time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())
@@ -13,7 +15,7 @@ proxy_stub = 'python ~/stratum-mining-proxy/mining_proxy.py -o 192.95.29.175 -gp
 
 while(True):
     procs = []
-    cmd = 'top -n1 -c -b | grep proxy | grep -v grep | awk \'{print $1,$9,$NF}\''
+    cmd = 'shelltop -n1 -c -b | grep proxy | grep -v grep | awk \'{print $1,$9,$NF}\''
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE,shell=True)
     while True:
         line = p.stdout.readline()

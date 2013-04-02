@@ -2,6 +2,8 @@ import sys
 import yaml
 from urllib2 import urlopen
 import re
+import time
+
 
 f=open('config.yaml')
 config=yaml.safe_load(f)
@@ -32,28 +34,31 @@ def get_clock(ip):
 def toggle_clock(ip):
     urlopen(ip+'/Sw_Clock')
 
-high = 0
-low = 0
 
-for k in config.keys():
-    res=map(parse,config[k])
-    domain = [item for sublist in res for item in sublist]
-    ips = map(lambda x:make_ip(k,x),domain)
-    for ip in ips:
-        sys.stdout.write('\rchecking node '+ip)
-        sys.stdout.flush()
-        status = get_clock(ip)
-        if( status == 'Low'):
-            print 'toggle '+ip+' to High'
-            toggle_clock(ip)
-            low+=1
-        else:
-            if(status == 'High'):
-                high+=1
+while(True):
+    high = 0
+    low = 0
+    
+    for k in config.keys():
+        res=map(parse,config[k])
+        domain = [item for sublist in res for item in sublist]
+        ips = map(lambda x:make_ip(k,x),domain)
+        for ip in ips:
+            print('checking node '+ip)
+            status = get_clock(ip)
+            if( status == 'Low'):
+                print 'toggle '+ip+' to High'
+                toggle_clock(ip)
+                low+=1
             else:
-                print status
+                if(status == 'High'):
+                    high+=1
+                else:
+                    print status
 
-print "Low:"+str(low)
-print "High:"+str(high)
+    print "Low:"+str(low)
+    print "High:"+str(high)
+    time.sleep(3600)
+
 
 

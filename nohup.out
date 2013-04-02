@@ -1,5 +1,0 @@
-=================2013-03-27 01:56:12==================
-Traceback (most recent call last):
-  File "proxy_monitor.py", line 43, in <module>
-    time.sleep(5)
-KeyboardInterrupt

@@ -10,7 +10,7 @@ def cur_time():
 
 # TODO: more accurate criteria 
 def is_stuck(proc):
-    return proc.get_cpu_percent(interval=0.1)>98
+    return proc.get_cpu_percent(interval=1)>98
 
 
 # 192.95.29.175  btcguild
@@ -21,7 +21,7 @@ def build_cmd(server,port):
 def get_proxy_pids():
     pids = []
     for p in psutil.process_iter():
-        if "-gp" in p.cmdline:
+        if p.status == psutil.STATUS_RUNNING and "-gp" in p.cmdline:
             pids.append(p.pid)
     return pids
 

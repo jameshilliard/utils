@@ -22,9 +22,9 @@ for board in boards:
         'JMSK' : '255.255.0.0',
         'JGTW' : '192.168.1.1',
         'PDNS' : '8.8.8.8',
-        'MURL' : '192.168.0.11,192.168.0.11',
+        'MURL' : '192.168.0.12,192.168.0.12',
         'MPRT' : str(port)+','+str(port),
-        'USPA' : 'asicminer_' + worker + ':wasabi,asicminer_' +  worker + ':wasabi',
+        'USPA' : 'realasicminer_' + worker + ':wasabi,realasicminer_' +  worker + ':wasabi',
         'JGTV' : '0',
         }
     print data

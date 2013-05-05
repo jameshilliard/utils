@@ -28,13 +28,11 @@ for board in boards:
         'JGTV' : '0',
         }
     print data
-    url     = 'http://192.168.1.254:8000/Upload_Data'
-    while(True):
-        try:
-            r = requests.post(url, data)
-            print r.content
-        except:
-            print "Cannot connect to rack " + str(rack) + ", board " + str(board)
-            continue
-        break
+    url     = 'http://192.168.'+str(rack)+'.'+str(board)+':8000/Upload_Data'
+    try:
+        r = requests.post(url, data)
+        print r.content
+    except:
+        print "Cannot connect to rack " + str(rack) + ", board " + str(board)
 
+    

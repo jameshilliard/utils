@@ -24,17 +24,15 @@ for board in boards:
         'PDNS' : '8.8.8.8',
         'MURL' : '192.168.0.11,192.168.0.11',
         'MPRT' : str(port)+','+str(port),
-        'USPA' : 'asicminer_' + worker + ':wasabi,asicminer_' +  worker + ':wasabi',
+        'USPA' : 'realasicminer_' + worker + ':wasabi,realasicminer_' +  worker + ':wasabi',
         'JGTV' : '0',
         }
     print data
-    url     = 'http://192.168.1.254:8000/Upload_Data'
-    while(True):
-        try:
-            r = requests.post(url, data)
-            print r.content
-        except:
-            print "Cannot connect to rack " + str(rack) + ", board " + str(board)
-            continue
-        break
+    url     = 'http://192.168.'+str(rack)+'.'+str(board)+':8000/Upload_Data'
+    try:
+        r = requests.post(url, data)
+        print r.content
+    except:
+        print "Cannot connect to rack " + str(rack) + ", board " + str(board)
 
+    

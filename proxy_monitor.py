@@ -45,6 +45,8 @@ while(True):
     print '=================' + cur_time() + '=================='
 
     # check low and high cpu usage
+    procs = map(psutil.Process,get_proxy_pids())
+
     for proc in procs:
         print "Checking PID:"+str(proc.pid)
         if is_stuck(proc):
@@ -60,6 +62,8 @@ while(True):
             print 'restart port '+port
 
     # check if port exists
+    procs = map(psutil.Process,get_proxy_pids())
+
     print "Check Ports:"+str(info)
     cur_ports = collect_info(procs).keys()
     flag = True
@@ -74,7 +78,6 @@ while(True):
         print "All ports alive"
 
     time.sleep(30)
-    procs = map(psutil.Process,get_proxy_pids())
 
    
 

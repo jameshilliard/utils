@@ -12,8 +12,12 @@ def cur_time():
 def is_stuck(proc):
     return proc.get_cpu_percent(interval=1)>98
 
+def is_low(proc):
+    return proc.get_cpu_percent(interval=1)<2
 
-# 192.95.29.175  btcguild
+
+# 54.235.91.242  btcguild
+# mint.bitminter.com bitminter
 # us.ozco.in     ozcoin
 def build_cmd(server,port):
     return 'python ~/stratum-mining-proxy/mining_proxy.py -o '+ server + ' -gp ' + port + ' >/dev/null 2>/dev/null &'
@@ -29,7 +33,7 @@ def get_proxy_pids():
 while(True):
     procs = map(psutil.Process,get_proxy_pids())
     for proc in procs:
-        if is_stuck(proc):
+        if (is_stuck(proc) or is_low(proc)):
             port = proc.cmdline[-1]
             server = proc.cmdline[3]
             # restart process
@@ -42,9 +46,9 @@ while(True):
             print 'restart port '+port
         else:
             continue
-            
-    print '=================' + cur_time() + '=================='
-    time.sleep(10)
+        
+print '=================' + cur_time() + '=================='
+time.sleep(30)
    
 
 

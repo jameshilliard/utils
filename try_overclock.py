@@ -2,13 +2,17 @@ import yaml
 from urllib2 import urlopen
 import re
 from time import sleep
+import request
+
  
 f=open('config.yaml')
 config=yaml.safe_load(f)
 f.close()
 
 def make_range(s):
-    return eval('range'+s)
+    r = eval('range'+s)
+    r.append(r[-1]+1)
+    return r
 
 def parse(obj):
     if isinstance(obj,str):
@@ -40,6 +44,9 @@ def count_X(ip):
 def toggle_clock(ip):
     urlopen(ip+'/Sw_Clock')
 
+def reset_board(ip):
+    requests.post(ip,{})
+
 def overclock():
     for k in config.keys():
         res=map(parse,config[k])
@@ -51,6 +58,7 @@ def overclock():
             if( status == 'Low'):
                 print 'toggle '+ip+' to High'
                 toggle_clock(ip)
+                reset_board(ip)
             else:
                 if(status == 'High'):
                     high+=1
@@ -72,6 +80,8 @@ def downclock():
                 
 
 overclock()
+print "Low:"+str(low)
+print "High:"+str(high)
 sleep(60)
 downclock()
 

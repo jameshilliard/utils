@@ -27,9 +27,24 @@ def get_proxy_pids():
             pids.append(p.pid)
     return pids
 
+def collect_info(procs):
+    info = {}
+    for proc in procs:
+        server = proc.cmdline[3]
+        port = proc.cmdline[-1]
+        info[port]=server
+    return info
+
+procs = map(psutil.Process,get_proxy_pids())
+info = collect_info(procs)
+
+print "Start watching ports:"
+print info
 
 while(True):
-    procs = map(psutil.Process,get_proxy_pids())
+    print '=================' + cur_time() + '=================='
+
+    # check low and high cpu usage
     for proc in procs:
         print "Checking PID:"+str(proc.pid)
         if is_stuck(proc):
@@ -43,8 +58,24 @@ while(True):
             print respawn
             subprocess.Popen(respawn,shell=True)
             print 'restart port '+port
-    print '=================' + cur_time() + '=================='
+
+    # check if port exists
+    print "Check Ports:"+str(info)
+    cur_ports = collect_info(procs).keys()
+    flag = True
+    for port in info.keys():
+        if(not port in cur_ports):
+            respawn = build_cmd(info[port],port)
+            print respawn
+            subprocess.Popen(respawn,shell=True)
+            print 'restart port '+port
+            flag = False
+    if(flag):
+        print "All ports alive"
+
     time.sleep(30)
+    procs = map(psutil.Process,get_proxy_pids())
+
    
 
 

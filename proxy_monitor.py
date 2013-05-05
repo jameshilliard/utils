@@ -10,11 +10,9 @@ def cur_time():
 
 # TODO: more accurate criteria 
 def is_stuck(proc):
-    return proc.get_cpu_percent(interval=1)>98
-
-def is_low(proc):
-    return proc.get_cpu_percent(interval=1)<2
-
+    usage = proc.get_cpu_percent(interval=1)
+    print usage
+    return (usage>98 or usage<2)
 
 # 54.235.91.242  btcguild
 # mint.bitminter.com bitminter
@@ -33,7 +31,8 @@ def get_proxy_pids():
 while(True):
     procs = map(psutil.Process,get_proxy_pids())
     for proc in procs:
-        if (is_stuck(proc) or is_low(proc)):
+        print "Checking PID:"+str(proc.pid)
+        if is_stuck(proc):
             port = proc.cmdline[-1]
             server = proc.cmdline[3]
             # restart process
@@ -44,11 +43,8 @@ while(True):
             print respawn
             subprocess.Popen(respawn,shell=True)
             print 'restart port '+port
-        else:
-            continue
-        
-print '=================' + cur_time() + '=================='
-time.sleep(30)
+    print '=================' + cur_time() + '=================='
+    time.sleep(30)
    
 
 

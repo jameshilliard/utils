@@ -3,13 +3,16 @@ from urllib2 import urlopen
 import re
 from time import sleep
 import requests
+
  
 f=open('config.yaml')
 config=yaml.safe_load(f)
 f.close()
 
 def make_range(s):
-    return eval('range'+s)
+    r = eval('range'+s)
+    r.append(r[-1]+1)
+    return r
 
 def parse(obj):
     if isinstance(obj,str):
@@ -96,11 +99,13 @@ def downclock():
     print discon
                 
 
-# print("overclock")
-# overclock()
-# print("overclock finished")
-# sleep(30)
-# print("downclock")
-# downclock()
+
+print("overclock")
+overclock()
+print("overclock finished")
+sleep(30)
+print("downclock")
+downclock()
+
 
 

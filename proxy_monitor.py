@@ -69,27 +69,28 @@ while(True):
             subprocess.Popen(respawn,shell=True)
             print 'restart port '+port
 
-    time.sleep(30)
+    # time.sleep(30)
 
-    # check if port exists
-    procs = map(psutil.Process,get_proxy_pids())
+    # # check if port exists
+    # procs = map(psutil.Process,get_proxy_pids())
 
-    print "Check Ports:"+str(info)
-    cur_ports = collect_info(procs).keys()
-    flag = True
-    for port in info.keys():
-        if(not port in cur_ports):
-            respawn = build_cmd(info[port],port)
-            print respawn
-            subprocess.Popen(respawn,shell=True)
-            print 'restart port '+port
-            flag = False
-    if(flag):
-        print "All ports alive"
+    # print "Check Ports:"+str(info)
+    # cur_ports = collect_info(procs).keys()
+    # flag = True
+    # for port in info.keys():
+    #     if(not port in cur_ports):
+    #         respawn = build_cmd(info[port],port)
+    #         print respawn
+    #         subprocess.Popen(respawn,shell=True)
+    #         print 'restart port '+port
+    #         flag = False
+    # if(flag):
+    #     print "All ports alive"
 
         
     # restart all every 100 round
-    if(count>60):
+    if(count>120):
+        print "restart all"
         count = 0
         procs = map(psutil.Process,get_proxy_pids())
         for proc in procs:

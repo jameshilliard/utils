@@ -12,7 +12,10 @@ def cur_time():
 def is_stuck(proc):
     usage = proc.get_cpu_percent(interval=1)
     print usage
-    return (usage>98 or usage<2)
+    return (
+        usage>98 
+        # or usage<2
+        )
 
 # 54.235.91.242  btcguild
 # mint.bitminter.com bitminter
@@ -35,13 +38,18 @@ def collect_info(procs):
         info[port]=server
     return info
 
-procs = map(psutil.Process,get_proxy_pids())
-info = collect_info(procs)
 
+
+procs = map(psutil.Process,get_proxy_pids())
 print "Start watching ports:"
+info = collect_info(procs)
 print info
 
+count = 0
+
 while(True):
+    count = count + 1
+    
     print '=================' + cur_time() + '=================='
 
     # check low and high cpu usage
@@ -61,6 +69,8 @@ while(True):
             subprocess.Popen(respawn,shell=True)
             print 'restart port '+port
 
+    time.sleep(30)
+
     # check if port exists
     procs = map(psutil.Process,get_proxy_pids())
 
@@ -76,6 +86,21 @@ while(True):
             flag = False
     if(flag):
         print "All ports alive"
+
+        
+    # restart all every 100 round
+    if(count>60):
+        count = 0
+        procs = map(psutil.Process,get_proxy_pids())
+        for proc in procs:
+            print 'killed process '+ str(proc.pid)
+            os.kill(proc.pid,9)
+        time.sleep(10)
+        for port in info.keys():
+            respawn = build_cmd(info[port],port)
+            print respawn
+            subprocess.Popen(respawn,shell=True)
+            print 'restart port '+port
 
     time.sleep(30)
 

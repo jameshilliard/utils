@@ -48,7 +48,7 @@ try:
             print data
             try:
                 req = requests.post(url,data,timeout=3)
-                print r.content
+                print req.content
             except:
                 print "Cannot connect to %s" % ip
                 failed.append(ip)
